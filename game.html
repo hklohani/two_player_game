@@ -23,46 +23,65 @@
 
 <body>
     <div class="main">
-
+        <h1 id="game_count"></h1>
         <button id="start">START GAME</button>
         <div id="player">
 
             <p id="player1"></p>
             <p id="player2"></p>
+            <p id="win"></p>
         </div>
     </div>
     <script>
+        var count1 = 0;
+        var count2 = 0;
+        var game_count = 0;
+
+
         document.getElementById("start").addEventListener("click", () => {
             var health1 = 100;
             var health2 = 100;
-            var count1 = 0;
-            var count2 = 0;
-            while (health1 > -1 || health2 > -1) {
-                var player1dec = Math.floor(Math.random() * 6);
-                var player2dec = Math.floor(Math.random() * 6);
-                health1 -= player1dec;
-                health2 -= player2dec;
+            game_count += 1;
 
-                if (health1 < 0 || health2 < 0) {
-                    break;
+            document.getElementById("game_count").innerHTML = `Game ${game_count}`
+
+            function decide() {
+                while (health1 > -1 || health2 > -1) {
+                    var player1dec = Math.floor(Math.random() * 6);
+                    var player2dec = Math.floor(Math.random() * 6);
+                    health1 -= player1dec;
+                    health2 -= player2dec;
+
+                    if (health1 < 0 || health2 < 0) {
+                        break;
+                    }
                 }
+                if (health1 > health2) {
+                    count1 += 1
+                    document.getElementById("player1").innerHTML = `Player 1 - won: ${count1}`
+                    document.getElementById("player2").innerHTML = `Player 2 - won: ${count2}`
+                } else {
+                    count2 += 1
+                    document.getElementById("player2").innerHTML = `Player 2 - won: ${count2}`
+                    document.getElementById("player1").innerHTML = `Player 1 - won: ${count1}`
+                }
+                document.getElementById("player").style.display = "block";
+                console.log(count1, count2)
             }
-            if (health1 > health2) {
-                document.getElementById("player1").innerHTML = "Player 1 won"
-                document.getElementById("player2").innerHTML = ""
-                count1 += 1
-            } else {
-                document.getElementById("player2").innerHTML = "Player 2 won"
-                document.getElementById("player1").innerHTML = ""
-                count2 += 1
+            decide()
+            health1 = 100;
+            health2 = 100;
+            if (count1 == 3) {
+                document.getElementById("win").innerHTML = "Player1 won the match!"
+                const button = document.querySelector('button')
+                button.disabled = true
             }
-            if (count1 > count2) {
-                console.log('player 1 won')
-            } else {
-                console.log("player 2 won")
+            if (count2 == 3) {
+                document.getElementById("win").innerHTML = "Player2 won the match!"
+                const button = document.querySelector('button')
+                button.disabled = true
             }
 
-            document.getElementById("player").style.display = "block";
         })
     </script>
 </body>
